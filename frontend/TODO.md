@@ -1,0 +1,3 @@
+- [x] Create src/components/DetailView.tsx component to display PricingData
+- [x] Create src/app/detail/page.tsx page to read data from localStorage and render DetailView
+- [x] Update handleSubmit in HeritageDashboard to save data to localStorage and navigate to /detail
