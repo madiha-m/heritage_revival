@@ -1,3 +1,16 @@
-- [x] Create src/components/DetailView.tsx component to display PricingData
-- [x] Create src/app/detail/page.tsx page to read data from localStorage and render DetailView
-- [x] Update handleSubmit in HeritageDashboard to save data to localStorage and navigate to /detail
+# TODO: Fix Next.js Build Errors and Warnings
+
+## Errors to Fix (Blocking Build)
+- [x] Fix `any` type in `ConsentSection.tsx` onChange prop
+- [x] Fix `any` type in `ContributionSection.tsx` onChange prop
+- [x] Fix `any` type in `index.tsx` updatePricingData function
+
+## Warnings to Fix (Non-Blocking)
+- [x] Remove unused `DEFAULT_COUNTRY` import in `CountrySelector.tsx`
+- [x] Remove unused `CountrySelector` and `PhoneInput` imports in `index.tsx`
+- [x] Replace `<img>` with `<Image>` in `ProfileSection.tsx`
+- [x] Replace `<img>` with `<Image>` in `MemberCard.tsx`
+
+## Followup
+- [ ] Run `pnpm build` in frontend directory to verify fixes
+- [ ] Test application functionality

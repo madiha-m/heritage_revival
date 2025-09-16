@@ -21,7 +21,7 @@ interface ContributionSectionProps {
         contributionHourlyRate: string;
         discountOffered: string;
     };
-    onChange: (field: string, value: any) => void;
+    onChange: (field: string, value: string | string[]) => void;
 }
 
 const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChange }) => {

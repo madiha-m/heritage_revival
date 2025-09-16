@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from 'antd';
-import { COUNTRIES, DEFAULT_COUNTRY } from '@/lib/constants';
+import { COUNTRIES } from '@/lib/constants';
 import styles from './styles.module.css';
 
 const { Option } = Select;

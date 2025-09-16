@@ -6,8 +6,6 @@ import { PricingData } from '@/types';
 import { DEFAULT_COUNTRY, DEFAULT_WORKING_HOURS, COUNTRIES } from '@/lib/constants';
 import { calculateTotal } from '@/lib/utils';
 import ProfileSection from './ProfileSection';
-import CountrySelector from './CountrySelector';
-import PhoneInput from './PhoneInput';
 import PricingCalculator from './PricingCalculator';
 import PersonalDetailsSection from './PersonalDetailsSection';
 import ContributionSection from './ContributionSection';
@@ -53,7 +51,7 @@ const HeritageDashboard: React.FC = () => {
         updatePricingData('totalAmount', total);
     }, [pricingData.contributionHourlyRate, pricingData.isFullDay, pricingData.workingHours, pricingData.extraHours]);
 
-    const updatePricingData = (field: string, value: any) => {
+    const updatePricingData = (field: string, value: string | number | boolean | string[] | undefined) => {
         setPricingData(prev => ({ ...prev, [field]: value }));
     };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Upload, message } from 'antd';
 import { UploadOutlined, UserOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
+import Image from 'next/image';
 import styles from './styles.module.css';
 
 interface ProfileSectionProps {
@@ -37,7 +38,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageCh
         <div className={styles.profileSection}>
             <div className={styles.profileImageContainer}>
                 {profileImage ? (
-                    <img src={profileImage} alt="Profile" className={styles.profileImage} />
+                    <Image src={profileImage} alt="Profile" width={100} height={100} className={styles.profileImage} />
                 ) : (
                     <div className={styles.profilePlaceholder}>
                         <UserOutlined style={{ fontSize: '32px', color: '#999' }} />

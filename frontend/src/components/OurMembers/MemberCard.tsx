@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, Button } from 'antd';
+import Image from 'next/image';
 import { Member } from '@/types';
 
 interface MemberCardProps {
@@ -14,10 +15,12 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
       hoverable
       style={{ width: 320, margin: '16px' }}
       cover={
-        <img
+        <Image
           alt={member.fullName}
           src={member.profileImage}
-          style={{ height: 250, objectFit: 'cover' }}
+          width={320}
+          height={250}
+          style={{ objectFit: 'cover' }}
         />
       }
     >

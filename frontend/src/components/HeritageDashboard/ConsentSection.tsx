@@ -7,7 +7,7 @@ interface ConsentSectionProps {
         publicListing: string;
         consentContact: boolean;
     };
-    onChange: (field: string, value: any) => void;
+    onChange: (field: string, value: string | boolean) => void;
 }
 
 const ConsentSection: React.FC<ConsentSectionProps> = ({ data, onChange }) => {
