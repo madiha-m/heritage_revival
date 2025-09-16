@@ -115,21 +115,24 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
                     />
                 </Col>
             </Row>
-
-            {isFullDay && (
-                <div className={styles.breakdown}>
-                    <p className={styles.breakdownText}>
-                        Breakdown: {workingHours} hours ×{' '}
-                        {formatCurrency(hourlyRate, country)} ={' '}
-                        {formatCurrency(hourlyRate * workingHours, country)}
-                        {extraHours > 0 &&
-                            ` + ${extraHours} extra hours × ${formatCurrency(
-                                hourlyRate,
-                                country
-                            )} = ${formatCurrency(hourlyRate * extraHours, country)}`}
-                    </p>
-                </div>
-            )}
+            <div className={styles.breakdown}>
+                {isFullDay ? (
+                    <div className={styles.breakdown}>
+                        <p className={styles.breakdownText}>
+                            Breakdown: {workingHours} hours ×{' '}
+                            {formatCurrency(hourlyRate, country)} ={' '}
+                            {formatCurrency(hourlyRate * workingHours, country)}
+                            {extraHours > 0 &&
+                                ` + ${extraHours} extra hours × ${formatCurrency(
+                                    hourlyRate,
+                                    country
+                                )} = ${formatCurrency(hourlyRate * extraHours, country)}`}
+                        </p>
+                    </div>
+                ) : (
+                    <p className={styles.breakdownText}>&nbsp;</p>
+                )}
+            </div>
         </div>
     );
 };
