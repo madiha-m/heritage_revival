@@ -97,7 +97,7 @@ const HeritageDashboard: React.FC = () => {
         <div className={styles.container}>
             <Row gutter={[24, 24]}>
                 <Col xs={24} lg={8}>
-                    <Card title="Profile" className={styles.card}>
+                    <Card title="Profile Picture" className={styles.card}>
                         <ProfileSection
                             profileImage={pricingData.profileImage}
                             onImageChange={(image) => updatePricingData('profileImage', image)}

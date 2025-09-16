@@ -98,7 +98,7 @@ export default function RootLayout({
         />
 
         {/* Scroll-to-top script */}
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
             // Show the scroll-to-top button when the user scrolls down 300px
@@ -118,7 +118,7 @@ export default function RootLayout({
             });
             `,
           }}
-        />
+        /> */}
       </head>
       <body className={inter.className}>
         <AntdRegistry>
@@ -131,11 +131,11 @@ export default function RootLayout({
         </AntdRegistry>
 
         {/* Scroll to top button */}
-        <div className="scroll-to-top-container show">
+        {/* <div className="scroll-to-top-container show">
           <a href="/join-us/" className="scroll-to-top-link" id="scrollToTopBtn">
             <i className="fa fa-user-plus"></i> Join us as a member
           </a>
-        </div>
+        </div> */}
 
         {/* Lazy loading script */}
         <script
