@@ -8,9 +8,10 @@ import styles from './styles.module.css';
 interface ProfileSectionProps {
     profileImage?: string;
     onImageChange: (image: string) => void;
+    onFileChange: (file: File) => void;
 }
 
-const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageChange }) => {
+const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageChange, onFileChange }) => {
     const props: UploadProps = {
         beforeUpload: (file) => {
             const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -23,6 +24,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageCh
             }
 
             if (isJpgOrPng && isLt2M) {
+                onFileChange(file);
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     onImageChange(e.target?.result as string);
@@ -37,7 +39,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageCh
     return (
         <div className={styles.profileSection}>
             <div className={styles.profileImageContainer}>
-                {profileImage ? (
+                {profileImage && profileImage !== '' ? (
                     <Image src={profileImage} alt="Profile" width={100} height={100} className={styles.profileImage} />
                 ) : (
                     <div className={styles.profilePlaceholder}>

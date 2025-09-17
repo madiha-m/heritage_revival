@@ -20,7 +20,7 @@ const DetailView: React.FC<DetailViewProps> = ({ data }) => {
         <Col xs={24} lg={8}>
           <Card title="Profile">
             {data.profileImage && (
-              <Avatar size={100} src={data.profileImage} />
+              <Avatar size={100} src={data.profileImage.startsWith('data:image/') ? data.profileImage : `data:image/jpeg;base64,${data.profileImage}`} />
             )}
             <p><strong>Full Name:</strong> {data.fullName}</p>
             <p><strong>Email:</strong> {data.email}</p>

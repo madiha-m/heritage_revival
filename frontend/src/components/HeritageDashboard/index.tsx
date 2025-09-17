@@ -40,6 +40,7 @@ const HeritageDashboard: React.FC = () => {
         extraHours: 0,
         totalAmount: 0
     });
+    const [profileFile, setProfileFile] = useState<File | null>(null);
 
     useEffect(() => {
         const total = calculateTotal(
@@ -63,7 +64,7 @@ const HeritageDashboard: React.FC = () => {
         updatePricingData('countryCode', country ? `+${country.phoneCode}` : '+44');
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // Validate required fields
         const requiredFields = [
             'fullName', 'email', 'role', 'location',
@@ -83,13 +84,35 @@ const HeritageDashboard: React.FC = () => {
             return;
         }
 
-        // Save data to localStorage and navigate to detail page
+        // Submit data to backend API
         try {
-            localStorage.setItem('submittedData', JSON.stringify(pricingData));
-            window.location.href = '/detail';
+            const formData = new FormData();
+            for (const key in pricingData) {
+                if (pricingData.hasOwnProperty(key)) {
+                    const value = pricingData[key as keyof typeof pricingData];
+                    if (Array.isArray(value)) {
+                        value.forEach((v, i) => formData.append(`${key}[${i}]`, v));
+                    } else if (value !== undefined && value !== null) {
+                        formData.append(key, value.toString());
+                    }
+                }
+            }
+
+            const response = await fetch('http://127.0.0.1:5000/api/members', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit data');
+            }
+
+            const newMember = await response.json();
+            message.success('Submission successful!');
+            window.location.href = `/detail?id=${newMember._id}`;
         } catch (error) {
-            message.error('Failed to save submission data.');
-            console.error('Error saving data:', error);
+            message.error('Failed to submit data. Please try again.');
+            console.error('Error submitting data:', error);
         }
     };
 
@@ -101,6 +124,7 @@ const HeritageDashboard: React.FC = () => {
                         <ProfileSection
                             profileImage={pricingData.profileImage}
                             onImageChange={(image) => updatePricingData('profileImage', image)}
+                            onFileChange={(file) => setProfileFile(file)}
                         />
                     </Card>
 
