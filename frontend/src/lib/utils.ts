@@ -21,7 +21,6 @@ export const calculateTotal = (
         totlDiscountedAmount = perHrRate * (1 - discountPercentPerHr / 100) * hrsOfferForDiscount;
     }
     let totalAmount = 0;
-    isFullDay
     if (isFullDay) {
         totalAmount = perHrRate * workingHours + totlDiscountedAmount;
     } else {

@@ -13,7 +13,6 @@ export const metadata: Metadata = {
   robots: 'noindex, nofollow',
   authors: [{ name: 'Heritage Bridge' }],
   keywords: 'heritage, support, network, join, professionals',
-  viewport: 'width=device-width, initial-scale=1.0',
   alternates: {
     types: {
       'application/rss+xml': [
@@ -22,6 +21,11 @@ export const metadata: Metadata = {
       ],
     },
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
 };
 
 export default function RootLayout({
@@ -97,28 +101,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* Scroll-to-top script */}
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            // Show the scroll-to-top button when the user scrolls down 300px
-            window.onscroll = function() {
-              let scrollButton = document.querySelector('.scroll-to-top-container');
-              if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                scrollButton.classList.add('show');
-              } else {
-                scrollButton.classList.remove('show');
-              }
-            };
-
-            // Smooth scroll to the top when the button is clicked
-            document.querySelector('#scrollToTopBtn')?.addEventListener('click', function(e) {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-            `,
-          }}
-        /> */}
       </head>
       <body className={inter.className}>
         <AntdRegistry>
@@ -129,13 +111,6 @@ export default function RootLayout({
             </div>
           </ConfigProvider>
         </AntdRegistry>
-
-        {/* Scroll to top button */}
-        {/* <div className="scroll-to-top-container show">
-          <a href="/join-us/" className="scroll-to-top-link" id="scrollToTopBtn">
-            <i className="fa fa-user-plus"></i> Join us as a member
-          </a>
-        </div> */}
 
         {/* Lazy loading script */}
         <script

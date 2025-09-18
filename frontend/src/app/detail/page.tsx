@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import DetailView from '@/components/DetailView';
 import { PricingData } from '@/types';
 
-const DetailPage: React.FC = () => {
+const DetailPageContent: React.FC = () => {
   const [data, setData] = useState<PricingData | null>(null);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
@@ -43,6 +43,14 @@ const DetailPage: React.FC = () => {
   }
 
   return <DetailView data={data} />;
+};
+
+const DetailPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div style={{ padding: '20px' }}>Loading...</div>}>
+      <DetailPageContent />
+    </Suspense>
+  );
 };
 
 export default DetailPage;

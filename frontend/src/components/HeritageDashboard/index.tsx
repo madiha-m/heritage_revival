@@ -101,6 +101,9 @@ const HeritageDashboard: React.FC = () => {
                     }
                 }
             }
+            if (profileFile) {
+                formData.append('profileImageFile', profileFile);
+            }
 
             const response = await fetch('http://127.0.0.1:5000/api/members', {
                 method: 'POST',
