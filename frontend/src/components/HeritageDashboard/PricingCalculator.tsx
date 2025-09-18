@@ -10,6 +10,9 @@ interface PricingCalculatorProps {
     workingHours: number;
     extraHours: number;
     country: string;
+    discountOffered: string;
+    discountPercentage: number;
+    hoursDiscounted: number;
     onHourlyRateChange: (value: number) => void;
     onFullDayChange: (checked: boolean) => void;
     onWorkingHoursChange: (value: number) => void;
@@ -22,6 +25,9 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
     workingHours,
     extraHours,
     country,
+    discountOffered,
+    discountPercentage,
+    hoursDiscounted,
     onHourlyRateChange,
     onFullDayChange,
     onWorkingHoursChange,
@@ -34,7 +40,9 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
         hourlyRate,
         isFullDay,
         workingHours,
-        extraHours
+        discountOffered,
+        discountPercentage,
+        hoursDiscounted
     );
 
     return (

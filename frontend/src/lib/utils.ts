@@ -8,13 +8,24 @@ export const formatCurrency = (amount: number, currencyCode: string = 'GBP'): st
 };
 
 export const calculateTotal = (
-    hourlyRate: number,
+    perHrRate: number,
     isFullDay: boolean,
     workingHours: number,
-    extraHours: number
+    discountOffered: string,
+    discountPercentPerHr: number,
+    hrsOfferForDiscount: number,
+    // perHrDiscount: number,
 ): number => {
-    if (isFullDay) {
-        return hourlyRate * workingHours + (hourlyRate * extraHours);
+    let totlDiscountedAmount = 0;
+    if (discountOffered === 'yes') {
+        totlDiscountedAmount = perHrRate * (1 - discountPercentPerHr / 100) * hrsOfferForDiscount;
     }
-    return hourlyRate * workingHours;
+    let totalAmount = 0;
+    isFullDay
+    if (isFullDay) {
+        totalAmount = perHrRate * workingHours + totlDiscountedAmount;
+    } else {
+        totalAmount = perHrRate * 1 + totlDiscountedAmount;
+    }
+    return totalAmount;
 };

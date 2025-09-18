@@ -20,6 +20,8 @@ interface ContributionSectionProps {
         hoursContributed: string;
         contributionHourlyRate: string;
         discountOffered: string;
+        discountPercentPerHr: string;
+        hrsOfferForDiscount: string;
     };
     onChange: (field: string, value: string | string[]) => void;
 }
@@ -98,6 +100,33 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
                             <Radio value="no">No</Radio>
                         </Space>
                     </Radio.Group>
+                </div>
+
+            </div>
+
+            <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                    <label>What percentage discount do you want to offer per hour?</label>
+                    <Input
+                        value={data.discountPercentPerHr}
+                        onChange={(e) => onChange('discountPercentPerHr', e.target.value)}
+                        placeholder="e.g., 10"
+                        required
+                        addonAfter="%"
+                        disabled={data.discountOffered === 'no'}
+                    />
+
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label>How many hours will you offer at the discounted rate?</label>
+                    <Input
+                        value={data.hrsOfferForDiscount}
+                        onChange={(e) => onChange('hrsOfferForDiscount', e.target.value)}
+                        placeholder="e.g., 5 hours"
+                        required
+                        disabled={data.discountOffered === 'no'}
+                    />
                 </div>
             </div>
         </div>

@@ -39,6 +39,7 @@ const DetailView: React.FC<DetailViewProps> = ({ data }) => {
             <p><strong>Hours Contributed:</strong> {data.hoursContributed}</p>
             <p><strong>Hourly Rate:</strong> {data.contributionHourlyRate}</p>
             <p><strong>Discount Offered:</strong> {data.discountOffered}</p>
+            <p><strong>Discount Rate:</strong> {data.discountPercentPerHr}</p>
             <p><strong>Public Listing:</strong> {data.publicListing}</p>
             <p><strong>Consent to Contact:</strong> {data.consentContact ? 'Yes' : 'No'}</p>
             <Divider />

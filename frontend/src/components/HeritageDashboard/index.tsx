@@ -28,7 +28,9 @@ const HeritageDashboard: React.FC = () => {
         otherSkills: '',
         hoursContributed: '',
         contributionHourlyRate: '50',
-        discountOffered: '',
+        discountOffered: 'no',
+        discountPercentPerHr: '',
+        hrsOfferForDiscount: '',
         publicListing: '',
         consentContact: false,
         country: DEFAULT_COUNTRY,
@@ -47,10 +49,12 @@ const HeritageDashboard: React.FC = () => {
             parseFloat(pricingData.contributionHourlyRate) || 50,
             pricingData.isFullDay,
             pricingData.workingHours,
-            pricingData.extraHours
+            pricingData.discountOffered,
+            parseFloat(pricingData.discountPercentPerHr) || 0,
+            parseFloat(pricingData.hrsOfferForDiscount) || 0
         );
         updatePricingData('totalAmount', total);
-    }, [pricingData.contributionHourlyRate, pricingData.isFullDay, pricingData.workingHours, pricingData.extraHours]);
+    }, [pricingData.contributionHourlyRate, pricingData.isFullDay, pricingData.workingHours, pricingData.discountOffered, pricingData.discountPercentPerHr, pricingData.hrsOfferForDiscount]);
 
     const updatePricingData = (field: string, value: string | number | boolean | string[] | undefined) => {
         setPricingData(prev => ({ ...prev, [field]: value }));
@@ -157,7 +161,10 @@ const HeritageDashboard: React.FC = () => {
                                     otherSkills: pricingData.otherSkills,
                                     hoursContributed: pricingData.hoursContributed,
                                     contributionHourlyRate: pricingData.contributionHourlyRate,
-                                    discountOffered: pricingData.discountOffered
+                                    discountOffered: pricingData.discountOffered,
+                                    discountPercentPerHr: pricingData.discountPercentPerHr,
+                                    hrsOfferForDiscount: pricingData.hrsOfferForDiscount
+
                                 }}
                                 onChange={updatePricingData}
                             />
@@ -178,6 +185,9 @@ const HeritageDashboard: React.FC = () => {
                                     workingHours={pricingData.workingHours}
                                     extraHours={pricingData.extraHours}
                                     country={pricingData.country}
+                                    discountOffered={pricingData.discountOffered}
+                                    discountPercentage={parseFloat(pricingData.discountPercentPerHr) || 0}
+                                    hoursDiscounted={parseFloat(pricingData.hrsOfferForDiscount) || 0}
                                     onHourlyRateChange={(value) => updatePricingData('contributionHourlyRate', value.toString())}
                                     onFullDayChange={(checked) => updatePricingData('isFullDay', checked)}
                                     onWorkingHoursChange={(value) => updatePricingData('workingHours', value || DEFAULT_WORKING_HOURS)}

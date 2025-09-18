@@ -16,6 +16,8 @@ export interface PricingData {
     contributionHourlyRate: string;
     hourlyRate: number;
     discountOffered: string;
+    discountPercentPerHr: string;
+    hrsOfferForDiscount: string;
     publicListing: string;
     consentContact: boolean;
     country: string;
