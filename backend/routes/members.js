@@ -41,7 +41,10 @@ router.post('/', async (req, res) => {
     }
 
     const memberData = { ...req.body };
-    // profileImage is already in req.body as base64 string
+    // Handle profile image file if uploaded
+    if (req.file) {
+      memberData.profileImage = `/uploads/${req.file.filename}`;
+    }
 
     const member = new Member(memberData);
     const newMember = await member.save();

@@ -19,16 +19,27 @@ mongoose.connect(process.env.MONGO_URI)
 app.use(cors());
 app.use(express.json());
 
-// Multer for parsing multipart/form-data
-const upload = multer();
+// Multer for parsing multipart/form-data with file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.get('/', (req, res) => {
   res.json({ message: 'Heritage Revival Backend API' });
 });
 
-// Use members router with multer to parse form data
-app.use('/api/members', upload.none(), membersRouter);
+// Use members router with multer to handle single file upload
+app.use('/api/members', upload.single('profileImageFile'), membersRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
