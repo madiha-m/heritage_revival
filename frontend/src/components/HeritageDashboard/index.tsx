@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Button, message } from 'antd';
+import Swal from 'sweetalert2';
 import { PricingData } from '@/types';
 import { DEFAULT_COUNTRY, DEFAULT_WORKING_HOURS, COUNTRIES } from '@/lib/constants';
 import { calculateTotal } from '@/lib/utils';
@@ -79,12 +80,12 @@ const HeritageDashboard: React.FC = () => {
         const missingFields = requiredFields.filter(field => !pricingData[field as keyof PricingData]);
 
         if (missingFields.length > 0) {
-            message.error('Please fill in all required fields');
+            Swal.fire({ icon: 'error', title: 'Validation Error', text: 'Please fill in all required fields' });
             return;
         }
 
         if (!pricingData.consentContact) {
-            message.error('Please agree to be contacted');
+            Swal.fire({ icon: 'error', title: 'Consent Required', text: 'Please agree to be contacted' });
             return;
         }
 
@@ -95,7 +96,7 @@ const HeritageDashboard: React.FC = () => {
                 if (pricingData.hasOwnProperty(key)) {
                     const value = pricingData[key as keyof typeof pricingData];
                     if (Array.isArray(value)) {
-                        value.forEach((v, i) => formData.append(`${key}[${i}]`, v));
+                        value.forEach(v => formData.append(key, v));
                     } else if (value !== undefined && value !== null) {
                         formData.append(key, value.toString());
                     }
@@ -115,10 +116,11 @@ const HeritageDashboard: React.FC = () => {
             }
 
             const newMember = await response.json();
-            message.success('Submission successful!');
-            window.location.href = `/detail?id=${newMember._id}`;
+            Swal.fire({ icon: 'success', title: 'Success!', text: 'Submission successful!' }).then(() => {
+                window.location.href = `/detail?id=${newMember._id}`;
+            });
         } catch (error) {
-            message.error('Failed to submit data. Please try again.');
+            Swal.fire({ icon: 'error', title: 'Submission Failed', text: 'Failed to submit data. Please try again.' });
             console.error('Error submitting data:', error);
         }
     };
