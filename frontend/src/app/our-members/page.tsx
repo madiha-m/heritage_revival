@@ -16,8 +16,8 @@ const OurMembersPage: React.FC = () => {
         }
         return response.json();
       })
-      .then((fetchedMembers: Member[]) => {
-        setMembers(fetchedMembers);
+      .then((fetchedMembers: any[]) => {
+        setMembers(fetchedMembers.map(m => ({ ...m, id: m._id })));
       })
       .catch(error => {
         console.error('Error fetching members:', error);

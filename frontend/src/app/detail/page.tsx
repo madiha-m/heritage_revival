@@ -17,7 +17,7 @@ const DetailPageContent: React.FC = () => {
         .then(response => {
           if (!response.ok) {
             throw new Error('Failed to fetch data');
-          }fr
+          }
           return response.json();
         })
         .then((fetchedData: PricingData) => {

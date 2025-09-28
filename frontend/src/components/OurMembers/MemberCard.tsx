@@ -17,7 +17,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
       cover={
         <Image
           alt={member.fullName}
-          src={member.profileImage}
+          src={`http://localhost:5000${member.profileImage}`}
           width={320}
           height={250}
           style={{ objectFit: 'cover' }}
