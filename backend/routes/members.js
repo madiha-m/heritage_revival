@@ -1,6 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const Member = require('../models/Member');
+const nodemailer = require('nodemailer');
+
+// Email transporter setup
+const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: process.env.EMAIL_PORT || 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 // GET /api/members - Get all members
 router.get('/', async (req, res) => {
@@ -28,6 +40,7 @@ router.get('/:id', async (req, res) => {
 // POST /api/members - Create a new member
 router.post('/', async (req, res) => {
   try {
+    console.log('Received form data:', req.body); // Debug log
     // Validate required fields
     const { fullName, email, role, location, consentContact } = req.body;
     if (!fullName || !email || !role || !location || consentContact === undefined) {
@@ -48,6 +61,28 @@ router.post('/', async (req, res) => {
 
     const member = new Member(memberData);
     const newMember = await member.save();
+
+    // Send confirmation email
+    try {
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Welcome to Heritage Support Network',
+            html: `
+                <h1>Welcome ${fullName}!</h1>
+                <p>Thank you for joining the Heritage Support Network. Your submission has been received successfully.</p>
+                <p>We will contact you soon with more details.</p>
+                <br>
+                <p>Best regards,<br>Heritage Revival Team</p>
+            `
+        };
+        await transporter.sendMail(mailOptions);
+        console.log('Confirmation email sent to:', email);
+    } catch (emailError) {
+        console.error('Failed to send confirmation email:', emailError);
+        // Don't fail the response if email fails
+    }
+
     res.status(201).json(newMember);
   } catch (error) {
     res.status(400).json({ message: error.message });

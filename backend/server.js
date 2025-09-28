@@ -3,9 +3,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const membersRouter = require('./routes/members');
 
 dotenv.config();
+
+const membersRouter = require('./routes/members');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,7 +29,13 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: {
+    fieldSize: 1024 * 1024 * 10, // 10MB for field values
+    fileSize: 1024 * 1024 * 5, // 5MB for files
+  }
+});
 
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
