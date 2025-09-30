@@ -31,7 +31,7 @@ const HeritageDashboard: React.FC = () => {
         contributionHourlyRate: '50',
         discountOffered: 'no',
         discountPercentPerHr: '',
-        hrsOfferForDiscount: '',
+        hrsOfferForDiscount: '0',
         publicListing: '',
         consentContact: false,
         country: DEFAULT_COUNTRY,
