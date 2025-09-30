@@ -47,7 +47,7 @@ const DetailView: React.FC<DetailViewProps> = ({ data }) => {
             <p><strong>Mobile Number:</strong>{normalizedCountryCode} {normalizedMobileNumber}</p>
             <p><strong>Is Full Day:</strong> {data.isFullDay ? 'Yes' : 'No'}</p>
             <p><strong>Working Hours:</strong> {data.workingHours}</p>
-            <p><strong>Extra Hours:</strong> {data.extraHours}</p>
+            {/* <p><strong>Extra Hours:</strong> {data.extraHours}</p> */}
             <p><strong>Total Amount:</strong> {data.totalAmount !== 0 ? data.totalAmount : 'N/A'}</p>
           </Card>
         </Col>

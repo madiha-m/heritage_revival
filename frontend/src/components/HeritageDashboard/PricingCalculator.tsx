@@ -94,7 +94,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
                 </Col>
 
                 {/* Extra Hours */}
-                <Col span={12}>
+                {/* <Col span={12}>
                     <div className={styles.formItem}>
                         <label>Extra Hours</label>
                         <InputNumber
@@ -106,7 +106,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
                             className={styles.input}
                         />
                     </div>
-                </Col>
+                </Col> */}
             </Row>
 
             <Divider />
