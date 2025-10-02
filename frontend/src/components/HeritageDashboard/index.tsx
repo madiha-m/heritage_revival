@@ -1,7 +1,7 @@
-'use client';
+ 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Button, message } from 'antd';
+import { Card, Row, Col, Button, message, Form } from 'antd';
 import Swal from 'sweetalert2';
 import { PricingData } from '@/types';
 import { DEFAULT_COUNTRY, DEFAULT_WORKING_HOURS, COUNTRIES } from '@/lib/constants';
@@ -14,6 +14,7 @@ import ConsentSection from './ConsentSection';
 import styles from './styles.module.css';
 
 const HeritageDashboard: React.FC = () => {
+    const [form] = Form.useForm();
     const [pricingData, setPricingData] = useState<PricingData>({
         profileImage: '',
         fullName: '',
@@ -46,6 +47,10 @@ const HeritageDashboard: React.FC = () => {
     const [profileFile, setProfileFile] = useState<File | null>(null);
 
     useEffect(() => {
+        form.setFieldsValue(pricingData);
+    }, [form, pricingData]);
+
+    useEffect(() => {
         const total = calculateTotal(
             parseFloat(pricingData.contributionHourlyRate) || 50,
             pricingData.isFullDay,
@@ -70,31 +75,20 @@ const HeritageDashboard: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        // Validate required fields
-        const requiredFields = [
-            'fullName', 'email', 'role', 'location',
-            'skills', 'otherSkills', 'hoursContributed',
-            'contributionHourlyRate', 'discountOffered', 'publicListing'
-        ];
-
-        const missingFields = requiredFields.filter(field => !pricingData[field as keyof PricingData]);
-
-        if (missingFields.length > 0) {
-            Swal.fire({ icon: 'error', title: 'Validation Error', text: 'Please fill in all required fields' });
-            return;
-        }
-
-        if (!pricingData.consentContact) {
-            Swal.fire({ icon: 'error', title: 'Consent Required', text: 'Please agree to be contacted' });
-            return;
-        }
-
-        // Submit data to backend API
         try {
+            const values = await form.validateFields();
+
+            if (!values.consentContact) {
+                Swal.fire({ icon: 'error', title: 'Consent Required', text: 'Please agree to be contacted' });
+                return;
+            }
+
             const formData = new FormData();
-            for (const key in pricingData) {
-                if (pricingData.hasOwnProperty(key)) {
-                    const value = pricingData[key as keyof typeof pricingData];
+
+            // Append form values to formData
+            for (const key in values) {
+                if (values.hasOwnProperty(key)) {
+                    const value = values[key];
                     if (Array.isArray(value)) {
                         value.forEach(v => formData.append(key, v));
                     } else if (value !== undefined && value !== null) {
@@ -102,6 +96,7 @@ const HeritageDashboard: React.FC = () => {
                     }
                 }
             }
+
             if (profileFile) {
                 formData.append('profileImageFile', profileFile);
             }
@@ -119,7 +114,11 @@ const HeritageDashboard: React.FC = () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Submission successful!' }).then(() => {
                 window.location.href = `/detail?id=${newMember._id}`;
             });
-        } catch (error) {
+        } catch (error: any) {
+            if (error.errorFields) {
+                // Validation errors handled by AntD form
+                return;
+            }
             Swal.fire({ icon: 'error', title: 'Submission Failed', text: 'Failed to submit data. Please try again.' });
             console.error('Error submitting data:', error);
         }
@@ -142,17 +141,9 @@ const HeritageDashboard: React.FC = () => {
 
                 <Col xs={24} lg={16}>
                     <Card title="Join the Heritage Support Network" className={styles.card}>
-                        <div className={styles.formContainer}>
+                        <Form form={form} layout="vertical" className={styles.formContainer} onValuesChange={(changedValues, allValues) => setPricingData(prev => ({ ...prev, ...allValues }))}>
                             <PersonalDetailsSection
-                                data={{
-                                    fullName: pricingData.fullName,
-                                    email: pricingData.email,
-                                    role: pricingData.role,
-                                    company: pricingData.company,
-                                    telephone: pricingData.telephone,
-                                    location: pricingData.location,
-                                    linkedIn: pricingData.linkedIn
-                                }}
+                                form={form}
                                 country={pricingData.telephoneCountry}
                                 mobileNumber={pricingData.mobileNumber}
                                 countryCode={pricingData.telephoneCountryCode}
@@ -160,27 +151,9 @@ const HeritageDashboard: React.FC = () => {
                                 onChange={updatePricingData}
                             />
 
-                            <ContributionSection
-                                data={{
-                                    skills: pricingData.skills,
-                                    otherSkills: pricingData.otherSkills,
-                                    hoursContributed: pricingData.hoursContributed,
-                                    contributionHourlyRate: pricingData.contributionHourlyRate,
-                                    discountOffered: pricingData.discountOffered,
-                                    discountPercentPerHr: pricingData.discountPercentPerHr,
-                                    hrsOfferForDiscount: pricingData.hrsOfferForDiscount
+                            <ContributionSection form={form} />
 
-                                }}
-                                onChange={updatePricingData}
-                            />
-
-                            <ConsentSection
-                                data={{
-                                    publicListing: pricingData.publicListing,
-                                    consentContact: pricingData.consentContact
-                                }}
-                                onChange={updatePricingData}
-                            />
+                            <ConsentSection form={form} />
 
                             <div className={styles.section}>
                                 <h3>Pricing Configuration</h3>
@@ -210,7 +183,7 @@ const HeritageDashboard: React.FC = () => {
                                     Submit
                                 </Button>
                             </div>
-                        </div>
+                        </Form>
                     </Card>
                 </Col>
 
