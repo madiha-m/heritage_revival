@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Button, message, Form } from 'antd';
+import { Card, Row, Col, Button, Form } from 'antd';
 import Swal from 'sweetalert2';
 import { PricingData } from '@/types';
 import { DEFAULT_COUNTRY, DEFAULT_WORKING_HOURS, COUNTRIES } from '@/lib/constants';
