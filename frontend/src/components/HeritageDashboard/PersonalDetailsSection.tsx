@@ -6,7 +6,6 @@ import PhoneInput from './PhoneInput';
 import styles from './styles.module.css';
 
 interface PersonalDetailsSectionProps {
-    form: any;
     country: string;
     mobileNumber: string;
     countryCode: string;
@@ -14,7 +13,7 @@ interface PersonalDetailsSectionProps {
     onChange: (field: string, value: string) => void;
 }
 
-const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ form, country, mobileNumber, countryCode, onCountryChange, onChange }) => {
+const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ country, mobileNumber, countryCode, onCountryChange, onChange }) => {
     return (
         <div className={styles.section}>
             <h3>Personal and Professional Details</h3>

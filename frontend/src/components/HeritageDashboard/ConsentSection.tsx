@@ -3,10 +3,11 @@ import { Checkbox, Radio, Space, Form } from 'antd';
 import styles from './styles.module.css';
 
 interface ConsentSectionProps {
-    form: any;
+    consentContact: boolean;
+    onConsentChange: (checked: boolean) => void;
 }
 
-const ConsentSection: React.FC<ConsentSectionProps> = ({ form }) => {
+const ConsentSection: React.FC<ConsentSectionProps> = ({ consentContact, onConsentChange }) => {
     return (
         <div className={styles.section}>
             <h3>Consent and Participation</h3>
@@ -29,7 +30,7 @@ const ConsentSection: React.FC<ConsentSectionProps> = ({ form }) => {
                 valuePropName="checked"
                 rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error('You must consent to be contacted')) }]}
             >
-                <Checkbox className={styles.checkbox}>
+                <Checkbox className={styles.checkbox} checked={consentContact} onChange={e => onConsentChange(e.target.checked)}>
                     I agree to be contacted via email or phone for relevant projects or community support activities
                 </Checkbox>
             </Form.Item>
