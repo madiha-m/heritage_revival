@@ -34,6 +34,7 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
         onChange('skills', newSkills);
     };
 
+    const isOtherChecked = data.skills.includes('Other');
     return (
         <div className={styles.section}>
             <h3>Your Contribution</h3>
@@ -57,12 +58,13 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
 
             <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                    <label>Other / Additional Skills or Services *</label>
+                    <label>Other / Additional Skills or Services {isOtherChecked ? '*' : ''}</label>
                     <Input
                         value={data.otherSkills}
                         onChange={(e) => onChange('otherSkills', e.target.value)}
                         placeholder="Other Skills"
-                        required
+                        required={isOtherChecked}
+                        disabled={!isOtherChecked}
                     />
                 </div>
 

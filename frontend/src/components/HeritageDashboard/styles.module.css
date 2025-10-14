@@ -59,12 +59,12 @@
 .formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .formGroup {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .formGroup label {

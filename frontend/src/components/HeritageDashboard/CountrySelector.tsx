@@ -27,7 +27,6 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({ value, onChange }) =>
 
     return (
         <div className={styles.countrySelector}>
-            <label>Country</label>
             <Select
                 value={value}
                 onChange={handleChange}
