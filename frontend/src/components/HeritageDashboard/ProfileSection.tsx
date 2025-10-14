@@ -8,10 +8,9 @@ import styles from './styles.module.css';
 interface ProfileSectionProps {
     profileImage?: string;
     onImageChange: (image: string) => void;
-    onFileChange: (file: File) => void;
 }
 
-const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageChange, onFileChange }) => {
+const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageChange }) => {
     const props: UploadProps = {
         beforeUpload: (file) => {
             const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -24,7 +23,6 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageCh
             }
 
             if (isJpgOrPng && isLt2M) {
-                onFileChange(file);
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     onImageChange(e.target?.result as string);
@@ -51,7 +49,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profileImage, onImageCh
                 <Button
                     type="primary"
                     size="large"
-                    className={styles.submitButton} 
+                    className={styles.submitButton}
                     icon={<UploadOutlined />}
                 >
                     Upload Profile Picture

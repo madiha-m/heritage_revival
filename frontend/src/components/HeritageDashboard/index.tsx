@@ -1,4 +1,4 @@
- 'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Button, message, Form } from 'antd';
@@ -21,9 +21,6 @@ const HeritageDashboard: React.FC = () => {
         email: '',
         role: '',
         company: '',
-        telephone: '',
-        telephoneCountry: DEFAULT_COUNTRY,
-        telephoneCountryCode: '+44',
         location: '',
         linkedIn: '',
         skills: [],
@@ -44,7 +41,7 @@ const HeritageDashboard: React.FC = () => {
         extraHours: 0,
         totalAmount: 0
     });
-    const [profileFile, setProfileFile] = useState<File | null>(null);
+    // No need for profileFile state, image is base64 in pricingData.profileImage
 
     useEffect(() => {
         form.setFieldsValue(pricingData);
@@ -69,8 +66,6 @@ const HeritageDashboard: React.FC = () => {
     const handleCountryChange = (countryCode: string) => {
         const country = COUNTRIES.find(c => c.code === countryCode);
         updatePricingData('country', countryCode);
-        updatePricingData('telephoneCountry', countryCode);
-        updatePricingData('telephoneCountryCode', country ? `+${country.phoneCode}` : '+44');
         updatePricingData('countryCode', country ? `+${country.phoneCode}` : '+44');
     };
 
@@ -78,38 +73,42 @@ const HeritageDashboard: React.FC = () => {
         try {
             const values = await form.validateFields();
 
-            if (!values.consentContact) {
+            // Merge in fields from pricingData that may not be in AntD form (e.g., ContributionSection, file, etc.)
+            const mergedValues = {
+                ...pricingData,
+                ...values
+            };
+
+            // Required fields check (beyond AntD validation)
+            const requiredFields = [
+                'fullName', 'email', 'role', 'location', 'skills', 'otherSkills', 'hoursContributed',
+                'contributionHourlyRate', 'discountOffered', 'publicListing', 'consentContact'
+            ];
+            const missingFields = requiredFields.filter(field => {
+                if (Array.isArray(mergedValues[field])) {
+                    return mergedValues[field].length === 0;
+                }
+                return mergedValues[field] === undefined || mergedValues[field] === '' || mergedValues[field] === null;
+            });
+            if (missingFields.length > 0) {
+                Swal.fire({ icon: 'error', title: 'Missing Required Fields', text: `Please fill in: ${missingFields.join(', ')}` });
+                return;
+            }
+            if (!mergedValues.consentContact) {
                 Swal.fire({ icon: 'error', title: 'Consent Required', text: 'Please agree to be contacted' });
                 return;
             }
 
-            const formData = new FormData();
-
-            // Append form values to formData
-            for (const key in values) {
-                if (values.hasOwnProperty(key)) {
-                    const value = values[key];
-                    if (Array.isArray(value)) {
-                        value.forEach(v => formData.append(key, v));
-                    } else if (value !== undefined && value !== null) {
-                        formData.append(key, value.toString());
-                    }
-                }
-            }
-
-            if (profileFile) {
-                formData.append('profileImageFile', profileFile);
-            }
-
+            // Send JSON with base64 image
             const response = await fetch('http://127.0.0.1:5000/api/members', {
                 method: 'POST',
-                body: formData,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(mergedValues),
             });
-
             if (!response.ok) {
-                throw new Error('Failed to submit data');
+                const errorText = await response.text();
+                throw new Error('Failed to submit data: ' + errorText);
             }
-
             const newMember = await response.json();
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Submission successful!' }).then(() => {
                 window.location.href = `/detail?id=${newMember._id}`;
@@ -132,7 +131,6 @@ const HeritageDashboard: React.FC = () => {
                         <ProfileSection
                             profileImage={pricingData.profileImage}
                             onImageChange={(image) => updatePricingData('profileImage', image)}
-                            onFileChange={(file) => setProfileFile(file)}
                         />
                     </Card>
 
@@ -144,14 +142,17 @@ const HeritageDashboard: React.FC = () => {
                         <Form form={form} layout="vertical" className={styles.formContainer} onValuesChange={(changedValues, allValues) => setPricingData(prev => ({ ...prev, ...allValues }))}>
                             <PersonalDetailsSection
                                 form={form}
-                                country={pricingData.telephoneCountry}
+                                country={pricingData.country}
                                 mobileNumber={pricingData.mobileNumber}
-                                countryCode={pricingData.telephoneCountryCode}
+                                countryCode={pricingData.countryCode}
                                 onCountryChange={handleCountryChange}
                                 onChange={updatePricingData}
                             />
 
-                            <ContributionSection form={form} />
+                            <ContributionSection
+                                data={pricingData}
+                                onChange={updatePricingData}
+                            />
 
                             <ConsentSection form={form} />
 

@@ -26,15 +26,18 @@ const DetailView: React.FC<DetailViewProps> = ({ data }) => {
             <p><strong>Email:</strong> {data.email}</p>
             <p><strong>Role:</strong> {data.role}</p>
             <p><strong>Company:</strong> {data.company}</p>
-            <p><strong>Telephone:</strong> {normalizedCountryCode} {normalizedMobileNumber}</p>
+            {/* <p><strong>Telephone:</strong> {normalizedCountryCode} {normalizedMobileNumber}</p> */}
+            <p><strong>Country:</strong> {data.country}</p>
             <p><strong>Location:</strong> {data.location}</p>
+            <p><strong>Mobile Number:</strong>{normalizedCountryCode} {normalizedMobileNumber}</p>
             <p><strong>LinkedIn:</strong> {data.linkedIn}</p>
           </Card>
         </Col>
         <Col xs={24} lg={16}>
           <Card title="Contribution Details">
-            <p><strong>Skills:</strong></p>
-            {data.skills.map(skill => <Tag key={skill}>{skill}</Tag>)}
+            <p><strong>Skills:</strong>
+              {data.skills.map(skill => <Tag key={skill}>{skill}</Tag>)}</p>
+
             <p><strong>Other Skills:</strong> {data.otherSkills}</p>
             <p><strong>Hours Contributed:</strong> {data.hoursContributed}</p>
             <p><strong>Hourly Rate:</strong> {data.contributionHourlyRate}</p>
@@ -43,11 +46,8 @@ const DetailView: React.FC<DetailViewProps> = ({ data }) => {
             <p><strong>Public Listing:</strong> {data.publicListing}</p>
             <p><strong>Consent to Contact:</strong> {data.consentContact ? 'Yes' : 'No'}</p>
             <Divider />
-            <p><strong>Country:</strong> {data.country}</p>
-            <p><strong>Mobile Number:</strong>{normalizedCountryCode} {normalizedMobileNumber}</p>
             <p><strong>Is Full Day:</strong> {data.isFullDay ? 'Yes' : 'No'}</p>
             <p><strong>Working Hours:</strong> {data.workingHours}</p>
-            {/* <p><strong>Extra Hours:</strong> {data.extraHours}</p> */}
             <p><strong>Total Amount:</strong> {data.totalAmount !== 0 ? data.totalAmount : 'N/A'}</p>
           </Card>
         </Col>

@@ -5,9 +5,6 @@ export interface PricingData {
     email: string;
     role: string;
     company: string;
-    telephone: string;
-    telephoneCountry: string;
-    telephoneCountryCode: string;
     location: string;
     linkedIn: string;
     skills: string[];

@@ -10,18 +10,31 @@ interface MemberCardProps {
 }
 
 const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
+  // Support both base64 and URL images
+  let imageSrc = '';
+  if (member.profileImage) {
+    if (member.profileImage.startsWith('data:image/')) {
+      imageSrc = member.profileImage;
+    } else if (member.profileImage.startsWith('/uploads/')) {
+      imageSrc = `http://localhost:5000${member.profileImage}`;
+    } else {
+      imageSrc = member.profileImage;
+    }
+  }
   return (
     <Card
       hoverable
       style={{ width: 320, margin: '16px' }}
       cover={
-        <Image
-          alt={member.fullName}
-          src={`http://localhost:5000${member.profileImage}`}
-          width={320}
-          height={250}
-          style={{ objectFit: 'cover' }}
-        />
+        imageSrc ? (
+          <Image
+            alt={member.fullName}
+            src={imageSrc}
+            width={320}
+            height={250}
+            style={{ objectFit: 'cover' }}
+          />
+        ) : null
       }
     >
       <Card.Meta
