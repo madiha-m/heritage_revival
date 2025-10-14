@@ -135,7 +135,7 @@ const HeritageDashboard: React.FC = () => {
                     if (errObj && errObj.message && errObj.message.toLowerCase().includes('email')) {
                         errorMsg = errObj.message;
                     }
-                } catch {}
+                } catch { }
                 Swal.fire({ icon: 'error', title: 'Submission Failed', text: errorMsg });
                 return;
             }
@@ -143,8 +143,8 @@ const HeritageDashboard: React.FC = () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Submission successful!' }).then(() => {
                 window.location.href = `/detail?id=${newMember._id}`;
             });
-        } catch (error: any) {
-            if (error.errorFields) {
+        } catch (error) {
+            if (typeof error === 'object' && error !== null && 'errorFields' in error) {
                 // Validation errors handled by AntD form
                 return;
             }
@@ -171,7 +171,6 @@ const HeritageDashboard: React.FC = () => {
                     <Card title="Join the Heritage Support Network" className={styles.card}>
                         <Form form={form} layout="vertical" className={styles.formContainer} onValuesChange={(changedValues, allValues) => setPricingData(prev => ({ ...prev, ...allValues }))}>
                             <PersonalDetailsSection
-                                form={form}
                                 country={pricingData.country}
                                 mobileNumber={pricingData.mobileNumber}
                                 countryCode={pricingData.countryCode}
@@ -184,7 +183,7 @@ const HeritageDashboard: React.FC = () => {
                                 onChange={updatePricingData}
                             />
 
-                            <ConsentSection form={form} />
+                            <ConsentSection consentContact={pricingData.consentContact} onConsentChange={checked => updatePricingData('consentContact', checked)} />
 
                             <div className={styles.section}>
                                 <h3>Pricing Configuration</h3>
