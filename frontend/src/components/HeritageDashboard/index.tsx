@@ -92,16 +92,25 @@ const HeritageDashboard: React.FC = () => {
             // Required fields check (beyond AntD validation)
             // Map 'role' to 'professionalTitle' for required field validation
             const requiredFields = [
-                'fullName', 'email', 'professionalTitle', 'location', 'skills', 'hoursContributed',
-                'contributionHourlyRate', 'discountOffered', 'publicListing', 'consentContact'
+                'fullName', 'email', 'professionalTitle', 'location', 'skills',
+                'hoursContributed', 'contributionHourlyRate', 'discountOffered',
+                'publicListing', 'consentContact'
             ];
             // Copy professionalTitle to role for backend compatibility
             if (!mergedValues.role && mergedValues.professionalTitle) {
                 mergedValues.role = mergedValues.professionalTitle;
             }
-            let missingFields = requiredFields.filter(field => {
+            const missingFields = requiredFields.filter(field => {
                 if (Array.isArray(mergedValues[field])) {
                     return mergedValues[field].length === 0;
+                }
+                // For the three required fields, check for empty string or undefined
+                if ([
+                    'hoursContributed',
+                    'contributionHourlyRate',
+                    'discountOffered'
+                ].includes(field)) {
+                    return mergedValues[field] === undefined || mergedValues[field] === '';
                 }
                 return mergedValues[field] === undefined || mergedValues[field] === '' || mergedValues[field] === null;
             });
@@ -199,7 +208,7 @@ const HeritageDashboard: React.FC = () => {
                                     onHourlyRateChange={(value) => updatePricingData('contributionHourlyRate', value.toString())}
                                     onFullDayChange={(checked) => updatePricingData('isFullDay', checked)}
                                     onWorkingHoursChange={(value) => updatePricingData('workingHours', value || DEFAULT_WORKING_HOURS)}
-                                    onExtraHoursChange={(value) => updatePricingData('extraHours', value || 0)}
+                                // onExtraHoursChange={(value) => updatePricingData('extraHours', value || 0)}
                                 />
                             </div>
 

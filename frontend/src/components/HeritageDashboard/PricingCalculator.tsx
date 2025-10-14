@@ -16,7 +16,7 @@ interface PricingCalculatorProps {
     onHourlyRateChange: (value: number) => void;
     onFullDayChange: (checked: boolean) => void;
     onWorkingHoursChange: (value: number) => void;
-    onExtraHoursChange: (value: number) => void;
+    // onExtraHoursChange: (value: number) => void;
 }
 
 const PricingCalculator: React.FC<PricingCalculatorProps> = ({
@@ -31,7 +31,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
     onHourlyRateChange,
     onFullDayChange,
     onWorkingHoursChange,
-    onExtraHoursChange,
+    // onExtraHoursChange,
 }) => {
     const countryData = COUNTRIES.find((c) => c.code === country);
     const currencySymbol = countryData?.currencySymbol || '£';

@@ -69,7 +69,7 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>How many hours can you contribute (free of charge)? *</label>
+                    <label>How many hours can you contribute (free of charge)?</label>
                     <Input
                         value={data.hoursContributed}
                         onChange={(e) => onChange('hoursContributed', e.target.value)}
