@@ -25,7 +25,7 @@ const HeritageDashboard: React.FC = () => {
         linkedIn: '',
         skills: [],
         otherSkills: '',
-        hoursContributed: '',
+        hoursContributed: '0',
         contributionHourlyRate: '50',
         discountOffered: 'no',
         discountPercentPerHr: '',
@@ -37,7 +37,7 @@ const HeritageDashboard: React.FC = () => {
         mobileNumber: '',
         hourlyRate: 50,
         isFullDay: false,
-        workingHours: DEFAULT_WORKING_HOURS,
+        workingHours: 1,
         extraHours: 0,
         totalAmount: 0
     });
@@ -60,7 +60,17 @@ const HeritageDashboard: React.FC = () => {
     }, [pricingData.contributionHourlyRate, pricingData.isFullDay, pricingData.workingHours, pricingData.discountOffered, pricingData.discountPercentPerHr, pricingData.hrsOfferForDiscount]);
 
     const updatePricingData = (field: string, value: string | number | boolean | string[] | undefined) => {
-        setPricingData(prev => ({ ...prev, [field]: value }));
+        setPricingData(prev => {
+            if (field === 'isFullDay') {
+                const boolValue = Boolean(value);
+                return {
+                    ...prev,
+                    isFullDay: boolValue,
+                    workingHours: boolValue ? 8 : 1
+                };
+            }
+            return { ...prev, [field]: value };
+        });
     };
 
     const handleCountryChange = (countryCode: string) => {
@@ -80,16 +90,27 @@ const HeritageDashboard: React.FC = () => {
             };
 
             // Required fields check (beyond AntD validation)
+            // Map 'role' to 'professionalTitle' for required field validation
             const requiredFields = [
-                'fullName', 'email', 'role', 'location', 'skills', 'otherSkills', 'hoursContributed',
+                'fullName', 'email', 'professionalTitle', 'location', 'skills', 'hoursContributed',
                 'contributionHourlyRate', 'discountOffered', 'publicListing', 'consentContact'
             ];
-            const missingFields = requiredFields.filter(field => {
+            // Copy professionalTitle to role for backend compatibility
+            if (!mergedValues.role && mergedValues.professionalTitle) {
+                mergedValues.role = mergedValues.professionalTitle;
+            }
+            let missingFields = requiredFields.filter(field => {
                 if (Array.isArray(mergedValues[field])) {
                     return mergedValues[field].length === 0;
                 }
                 return mergedValues[field] === undefined || mergedValues[field] === '' || mergedValues[field] === null;
             });
+            // Only require otherSkills if 'Other' is checked in skills
+            if (Array.isArray(mergedValues.skills) && mergedValues.skills.includes('Other')) {
+                if (!mergedValues.otherSkills || mergedValues.otherSkills.trim() === '') {
+                    missingFields.push('otherSkills');
+                }
+            }
             if (missingFields.length > 0) {
                 Swal.fire({ icon: 'error', title: 'Missing Required Fields', text: `Please fill in: ${missingFields.join(', ')}` });
                 return;
@@ -107,7 +128,16 @@ const HeritageDashboard: React.FC = () => {
             });
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error('Failed to submit data: ' + errorText);
+                // Try to parse errorText as JSON
+                let errorMsg = 'Failed to submit data. Please try again.';
+                try {
+                    const errObj = JSON.parse(errorText);
+                    if (errObj && errObj.message && errObj.message.toLowerCase().includes('email')) {
+                        errorMsg = errObj.message;
+                    }
+                } catch {}
+                Swal.fire({ icon: 'error', title: 'Submission Failed', text: errorMsg });
+                return;
             }
             const newMember = await response.json();
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Submission successful!' }).then(() => {

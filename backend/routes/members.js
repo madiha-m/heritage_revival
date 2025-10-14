@@ -50,12 +50,10 @@ router.post("/", async (req, res) => {
       !location ||
       consentContact === undefined
     ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Required fields are missing: fullName, email, role, location, consentContact",
-        });
+      return res.status(400).json({
+        message:
+          "Required fields are missing: fullName, email, role, location, consentContact",
+      });
     }
 
     // Basic email validation
@@ -64,19 +62,23 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
+    // Check for duplicate email
+    const existing = await Member.findOne({ email });
+    if (existing) {
+      return res
+        .status(409)
+        .json({ message: "A member with this email already exists." });
+    }
+
     const memberData = { ...req.body };
-    // If profileImageFile is present (from form-data), convert to base64 and store in profileImage
     if (
       req.body.profileImageFile &&
       typeof req.body.profileImageFile === "string"
     ) {
-      // Already base64 string from frontend
       memberData.profileImage = req.body.profileImageFile;
     } else if (req.body.profileImage) {
-      // Already base64 or empty
       memberData.profileImage = req.body.profileImage;
     }
-    // Remove profileImageFile from memberData if present
     delete memberData.profileImageFile;
 
     const member = new Member(memberData);

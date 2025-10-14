@@ -36,15 +36,16 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
 
     const countrySelectBefore = (
         <Select
-            value={countryCode.replace(/^\+/, '')} // make sure value has no +
+            value={countryCode.replace(/^"+/, '')}
             onChange={handleCountryCodeChange}
             className={styles.countryCodeSelect}
             showSearch
             optionFilterProp="children"
             filterOption={filterOption}
+            tabIndex={-1} // Remove from tab order
         >
             {COUNTRIES.map(country => {
-                const cleanPhoneCode = country.phoneCode.replace(/^\+/, '');
+                const cleanPhoneCode = country.phoneCode.replace(/^"+/, '');
                 return (
                     <Option key={country.code} value={cleanPhoneCode}>
                         {country.code} (+{cleanPhoneCode})
@@ -61,7 +62,6 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
 
     return (
         <div className={styles.phoneInput}>
-            <label>Mobile Number</label>
             <Input
                 addonBefore={countrySelectBefore}
                 value={formattedMobileNumber}
