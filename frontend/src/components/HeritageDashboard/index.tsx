@@ -148,9 +148,9 @@ const HeritageDashboard: React.FC = () => {
                 Swal.fire({ icon: 'error', title: 'Submission Failed', text: errorMsg });
                 return;
             }
-            const newMember = await response.json();
-            Swal.fire({ icon: 'success', title: 'Success!', text: 'Submission successful!' }).then(() => {
-                window.location.href = `/detail?id=${newMember._id}`;
+            await response.json();
+            Swal.fire({ icon: 'success', title: 'Success!', text: 'Registration successful! Please login.' }).then(() => {
+                window.location.href = '/login';
             });
         } catch (error) {
             if (typeof error === 'object' && error !== null && 'errorFields' in error) {

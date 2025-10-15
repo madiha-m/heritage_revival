@@ -1,3 +1,16 @@
+<div className={styles.formGroup}>
+    <Form.Item
+        label="Password"
+        name="password"
+        rules={[
+            { required: true, message: 'Please enter a password' },
+            { min: 8, message: 'Password must be at least 8 characters' },
+            { pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/, message: 'Password must be strong (uppercase, lowercase, number, special char)' }
+        ]}
+    >
+        <Input.Password placeholder="Create a strong password" autoComplete="new-password" />
+    </Form.Item>
+</div>
 import React from 'react';
 import axios from 'axios';
 import { Input, Form } from 'antd';

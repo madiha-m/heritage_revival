@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
 const Member = require("../models/Member");
@@ -42,17 +43,19 @@ router.post("/", async (req, res) => {
   try {
     console.log("Received form data:", req.body); // Debug log
     // Validate required fields
-    const { fullName, email, role, location, consentContact } = req.body;
+    const { fullName, email, password, role, location, consentContact } =
+      req.body;
     if (
       !fullName ||
       !email ||
+      !password ||
       !role ||
       !location ||
       consentContact === undefined
     ) {
       return res.status(400).json({
         message:
-          "Required fields are missing: fullName, email, role, location, consentContact",
+          "Required fields are missing: fullName, email, password, role, location, consentContact",
       });
     }
 
@@ -70,7 +73,31 @@ router.post("/", async (req, res) => {
         .json({ message: "A member with this email already exists." });
     }
 
-    const memberData = { ...req.body };
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const memberData = { ...req.body, password: hashedPassword };
+    // POST /api/members/login - Login route
+    router.post("/login", async (req, res) => {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res
+          .status(400)
+          .json({ message: "Email and password are required" });
+      }
+      const member = await Member.findOne({ email });
+      if (!member) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      const isMatch = await bcrypt.compare(password, member.password);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      res.json({
+        id: member._id,
+        email: member.email,
+        fullName: member.fullName,
+      });
+    });
     if (
       req.body.profileImageFile &&
       typeof req.body.profileImageFile === "string"

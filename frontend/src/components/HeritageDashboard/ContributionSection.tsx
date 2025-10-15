@@ -40,7 +40,7 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
             <h3>Your Contribution</h3>
 
             <div className={styles.formGroup}>
-                <label>What kind of support can you offer? *</label>
+                <label>What kind of support can you offer? </label>
                 <div className={styles.checkboxGroup}>
                     {skillsOptions.map(skill => (
                         <Checkbox
@@ -69,7 +69,7 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>How many hours can you contribute (free of charge)?</label>
+                    <label><span style={{ color: 'red' }}>*</span> How many hours can you contribute (free of charge)?</label>
                     <Input
                         value={data.hoursContributed}
                         onChange={(e) => onChange('hoursContributed', e.target.value)}
@@ -81,7 +81,7 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
 
             <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                    <label>What is your usual hourly rate (if applicable)? *</label>
+                    <label><span style={{ color: 'red' }}>*</span> What is your usual hourly rate (if applicable)?</label>
                     <Input
                         value={data.contributionHourlyRate}
                         onChange={(e) => onChange('contributionHourlyRate', e.target.value)}
@@ -91,7 +91,7 @@ const ContributionSection: React.FC<ContributionSectionProps> = ({ data, onChang
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>Are you willing to offer additional hours at a discounted rate? *</label>
+                    <label><span style={{ color: 'red' }}>*</span> Are you willing to offer additional hours at a discounted rate?</label>
                     <Radio.Group
                         value={data.discountOffered}
                         onChange={(e) => onChange('discountOffered', e.target.value)}
